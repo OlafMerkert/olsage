@@ -173,6 +173,17 @@ def rational_functions(field_or_char=0, var='t'):
     return field, param
 
 
+# degree function useful also for constant polynomials
+def degree(poly):
+    """Compute the degree of a univariate polynomial or Laurent series."""
+    if is_Polynomial(poly):
+        return poly.degree()
+    elif is_LaurentSeries(poly):
+        return poly.valuation()
+    else:
+        return 0
+
+
 # completing the square
 def sqrt_workaround(number):
     if number == 1:
@@ -197,3 +208,27 @@ whose square is as close as possible to thte original polynomial."""
         a -= c * (2 * b + c)
         b += c
     return b, a
+
+
+def normalise_monic(poly):
+    "Make the polynomial or Laurent series monic."
+    if is_Polynomial(poly):
+        return poly / poly.leading_coefficient()
+    elif is_LaurentSeries(poly):
+        return poly / poly.coefficients()[0]
+    elif poly == 0:
+        return 0
+    # the final case is a constant polynomial
+    else:
+        return 1
+
+
+# Laurent series utilities
+
+# workaround a limitation of sage: it can do sqrt of power series, but not of laurent series.
+def laurent_series_sqrt(laurent_series, prec=30):
+    val = laurent_series.valuation()
+    assert val % 2 == 0
+    power_series = laurent_series.shift(-val).power_series()
+    return power_series.sqrt(prec=prec).laurent_series().shift(val / 2)
+
