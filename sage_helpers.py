@@ -4,6 +4,7 @@
 
 
 # imports
+from __future__ import print_function
 from sage.all import *
 from sage.rings.polynomial.polynomial_element import is_Polynomial
 from sage.rings.laurent_series_ring_element import is_LaurentSeries
@@ -17,6 +18,7 @@ w = map(SR.wild, xrange(20))
 # general utilities
 def transpose(list_of_lists):
     return map(list, zip(*list_of_lists))
+
 
 def chunks(l, n=2):
     if n < 1:
@@ -40,21 +42,29 @@ def test_it(*args):
 
 
 # pretty printing
+def srepr(item, repr=True):
+    if repr and hasattr(item, 'repr'):
+        return item.repr()
+    else:
+        return item
+
+
 def lrepr(lst, repr=True, ret=False):
     if repr == "table":
         return trepr(lst)
     elif repr:
         for i, l in enumerate(lst):
-            print "{0}: {1}".format(i, l.repr())
+            print("{0}: {1}".format(i, srepr(l)))
     else:
         for i, l in enumerate(lst):
-            print "{0}: {1}".format(i, l)
+            print("{0}: {1}".format(i, l))
     if ret:
         return lst
 
+
 def trepr(lst, repr=True):
     if repr:
-        return [[i, l.repr()] for i, l in enumerate(lst)]
+        return [[i, srepr(l)] for i, l in enumerate(lst)]
     else:
         return [[i, l] for i, l in enumerate(lst)]
     if ret:
@@ -77,7 +87,7 @@ def latex_strip(string):
 def l(*args):
     if produce_latex:
         for a in args:
-            print "\\begin{dmath*}[frame,breakdepth={4}]", latex_strip(latex(a)), "\\end{dmath*}"
+            print("\\begin{dmath*}[frame,breakdepth={4}]", latex_strip(latex(a)), "\\end{dmath*}")
     else:
         if len(args) == 1:
             return args[0]
@@ -141,7 +151,6 @@ class ComputableDoubleLinkedList(object):
         else:
             raise IndexError
 
-
 
 # polynomial helpers
 
@@ -157,7 +166,34 @@ def polynomials(field_or_char=0, var='X'):
 
 QQ_poly, X = polynomials(0, 'X')
 
+
 def rational_functions(field_or_char=0, var='t'):
     poly, param = polynomials(field_or_char, var)
     field = poly.fraction_field()
     return field, param
+
+
+# completing the square
+def sqrt_workaround(number):
+    if number == 1:
+        return 1
+    else:
+        return sqrt(number)
+
+
+def complete_square(poly):
+    """we expect an univariate polynomial of even degree, where the
+leading coefficient is a square, then we try to find a polynomial
+whose square is as close as possible to thte original polynomial."""
+    a = poly
+    x, = gens(poly.parent())
+    deg = poly.degree()
+    assert (deg % 2 == 0)
+    lc = sqrt_workaround(a[deg])
+    b = lc * x ** (deg // 2)
+    a -= a[deg] * x ** deg
+    for i in xrange(1, deg // 2 + 1, 1):
+        c = (a[deg - i] / (2 * lc)) * x ** (deg // 2 - i)
+        a -= c * (2 * b + c)
+        b += c
+    return b, a
