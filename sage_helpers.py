@@ -262,12 +262,51 @@ def free_polynomial(varlist):
     beginning with the constant coefficient."""
     X = poly_over_varlist(varlist)
     return sum([v * X**i for i, v in enumerate(varlist)])
+
+
 # Laurent series utilities
 
+def Laurent_series(field_or_char=0, var='Z'):
+    if field_or_char == 0:
+        field = QQ
+    elif isinstance(field_or_char, int):
+        field = GF(field_or_char)
+    else:
+        field = field_or_char
+    laurent_series = LaurentSeriesRing(field, var)
+    return laurent_series, gens(laurent_series)[0]
+
+
+DEFAULT_SERIES_PREC = 30
+
+
 # workaround a limitation of sage: it can do sqrt of power series, but not of laurent series.
-def laurent_series_sqrt(laurent_series, prec=30):
+def laurent_series_sqrt(laurent_series, prec=DEFAULT_SERIES_PREC):
     val = laurent_series.valuation()
     assert val % 2 == 0
     power_series = laurent_series.shift(-val).power_series()
     return power_series.sqrt(prec=prec).laurent_series().shift(val / 2)
 
+
+def laurent_series_infinity_converter(polynomial_or_ring):
+    if is_Polynomial(polynomial_or_ring):
+        base = polynomial_or_ring.parent().base_ring()
+    elif isinstance(polynomial_or_ring, PolynomialRing):
+        base = polynomial_or_ring.base_ring()
+    else:
+        base = polynomial_or_ring
+    L, Z = Laurent_series(base)
+
+    def convert(x):
+        if is_Polynomial(x):
+            return x(1/Z)
+        else:
+            return x
+    convert.target = L
+    convert.var = Z
+    return convert
+
+
+def polynomial_laurent_sqrt(polynomial, prec=DEFAULT_SERIES_PREC):
+    c = laurent_series_infinity_converter(polynomial)
+    return laurent_series_sqrt(c(polynomial), prec=prec)
