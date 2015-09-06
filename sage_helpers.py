@@ -223,6 +223,45 @@ def normalise_monic(poly):
         return 1
 
 
+# constructing polynomials
+
+def random_int_monic_polynomial(deg, limit=80, base=QQ):
+    """Return a random polynomial with integer coefficients below limit
+    (default 80). The third optional parameter may be use to specify a
+    different base than QQ."""
+    R, X = polynomials(base)
+    poly = randint(0, limit) + X**deg
+    for i in xrange(1, deg):
+        poly += randint(0, limit) * X**i
+    return poly
+
+
+def poly_over_varlist(varlist):
+    """Build a univariate polynomial ring over the domain of definition of
+    the elements of varlist (which are assumed to be variables) and return
+    its generator."""
+    assert len(varlist) > 0
+    # to make sure we get the right parent, we do a sum of the variables.
+    R, X = polynomials(sum(varlist).parent())
+    return X
+
+
+def monic_free_polynomial(varlist):
+    """Return a monic polynomial in X with the coefficients the elements of
+    varlist, beginning with the constant coefficient."""
+    X = poly_over_varlist(varlist)
+    deg = len(varlist)
+    poly = X**deg
+    for i, v in enumerate(varlist):
+        poly += v * X**i
+    return poly
+
+
+def free_polynomial(varlist):
+    """Return a polynomial with coefficients the elements of varlist,
+    beginning with the constant coefficient."""
+    X = poly_over_varlist(varlist)
+    return sum([v * X**i for i, v in enumerate(varlist)])
 # Laurent series utilities
 
 # workaround a limitation of sage: it can do sqrt of power series, but not of laurent series.
