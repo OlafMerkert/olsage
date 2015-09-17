@@ -20,10 +20,10 @@ def gauss_valuation(poly, prime, prec=30):
 
 def series_valuation(series, prime, prec=30):
     """Compute the Gauss norm of the given Laurent series, with prime
-identifying the valuation. For practical reasons, we use a simple
-heuristic to determine if this valuation is bounded: We look at prec
-terms, and unless the minimal valuation occurs in the first two thirds
-of these, we say that we have unbounded valuation."""
+    identifying the valuation. For practical reasons, we use a simple
+    heuristic to determine if this valuation is bounded: We look at
+    prec terms, and unless the minimal valuation occurs in the first
+    two thirds of these, we say that we have unbounded valuation."""
     assert is_LaurentSeries(series)
     deg = series.valuation()
     trunc = series.truncate(prec - deg)

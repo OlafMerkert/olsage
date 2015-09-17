@@ -40,6 +40,37 @@ def test_it(*args):
     else:
         return False, problems
 
+def memoize_instance(f):
+    """Memoize a method, by storing the dict with the already computed
+    results in a slot of the object. We only memoize on the first
+    parameter. """
+    slot_name = "_m_" + f.__name__
+
+    def m(_self, x, *args):
+        if not hasattr(_self, slot_name):
+            _self.__dict__[slot_name] = dict()
+        if x in _self.__dict__[slot_name]:
+            return _self.__dict__[slot_name][x]
+        else:
+            v = f(_self, x, *args)
+            _self.__dict__[slot_name][x] = v
+            return v
+    return m
+
+def lazy_property(f):
+    """
+    Turn the given method into a readable property, but only do the computation for the first call.
+    """
+    name = f.__name__
+    slot_name = "_" + name
+
+    def m(_self):
+        if not hasattr(_self, slot_name):
+            _self.__dict__[slot_name] = f(_self)
+        return _self.__dict__[slot_name]
+
+    return property(m)
+
 
 # pretty printing
 def srepr(item, repr=True):
