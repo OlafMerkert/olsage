@@ -101,6 +101,38 @@ def trepr(lst, repr=True):
     if ret:
         return lst
 
+def fn_labels(repl="", tex=""):
+    """A simple decorator to add table headers to functions (or methods),
+    which should simplify table building even further. """
+    def dec(f):
+        f.__repl_doc = repl
+        f.__tex_doc = tex
+        return f
+    return dec
+
+def table_builder(header, sep, body):
+    header_list = []
+    latex_header_list = []
+    body_list = []
+    for (label, latex_label, content) in body:
+        if isinstance(label, tuple):
+            header_list.extend(label)
+            latex_header_list.extend(latex_label)
+            body_list.extend(content)
+        else:
+            header_list.append(label)
+            latex_header_list.append(latex_label)
+            body_list.append(content)
+    sep_list = [["--"] * len(header_list)]
+    body_list = zip(*body_list)
+    if sep:
+        body_list = sep_list + body_list
+    if header == "latex":
+        body_list = [latex_header_list] + body_list
+    elif header:
+        body_list = [header_list] + body_list
+    return body_list
+
 
 # producing latex output
 
