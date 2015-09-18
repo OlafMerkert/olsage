@@ -37,10 +37,15 @@ def series_valuation(series, prime, prec=30):
         return allmin
 
 
-def normalise_for_prime(poly, prime):
+def normalise_for_prime(prime, *polys):
     """Normalise the given polynomial (or Laurent series) so that it has valuation 0."""
-    exponent = gauss_valuation(poly, prime)
-    return prime**(-exponent) * poly
+    exponent = min([gauss_valuation(poly, prime) for poly in polys])
+    f = prime**(-exponent)
+    if len(polys) == 1:
+        return f * polys[0]
+    else:
+        return [f * poly for poly in polys] + [exponent]
+
 
 
 # domain operations
