@@ -63,3 +63,36 @@ def reduced_polynomials(field_or_polynomial_ring, uniformiser):
     else:
         field = field_or_polynomial_ring
     return polynomials(residue_field(field, uniformiser), 'Y')[0]
+
+
+# projective and affine heights, also for polynomials
+
+def first_poly2vector(f):
+    def m(poly_or_vector, *args):
+        if is_Polynomial(poly_or_vector):
+            return f(poly_or_vector.coefficients(), *args)
+        else:
+            return f(poly_or_vector, *args)
+    return m
+
+@first_poly2vector
+def projective_height(vector, abs_val=lambda x: x.abs()):
+    denoms = [v.denominator() for v in vector]
+    nums = [v.numerator() for v in vector]
+    d = lcm(denoms)
+    g = gcd(nums)
+    return abs_val(d)/abs_val(g) * max([abs_val(v) for v in vector])
+
+@first_poly2vector
+def projective_global_height(vector, abs_val=lambda x: x.abs()):
+    # use .numerical_approx() if we want a float
+    return log(projective_height(vector, abs_val))
+
+@first_poly2vector
+def affine_height(vector, abs_val=lambda x: x.abs()):
+    return projective_height(list(vector) + [Integer(1)], abs_val)
+
+@first_poly2vector
+def affine_global_height(vector, abs_val=lambda x: x.abs()):
+    # use .numerical_approx() if we want a float
+    return log(affine_height(vector, abs_val))
