@@ -251,8 +251,12 @@ def degree(poly):
 def sqrt_workaround(number):
     if number == 1:
         return 1
-    else:
-        return sqrt(number)
+    # another trick for symbolic expressions
+    elif number in SR:
+        m = number.match(w[0]**2)
+        if m:
+            return w[0].subs(m)
+    return sqrt(number)
 
 
 def complete_square(poly):
