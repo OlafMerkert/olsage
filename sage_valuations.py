@@ -58,8 +58,8 @@ def residue_field(field, uniformiser):
 
 
 def reduced_polynomials(field_or_polynomial_ring, uniformiser):
-    if isinstance(field_or_polynomial_ring, PolynomialRing):
-        field = field_or_polynomial_ring.parent()
+    if is_PolynomialRing(field_or_polynomial_ring):
+        field = field_or_polynomial_ring.base_ring()
     else:
         field = field_or_polynomial_ring
     return polynomials(residue_field(field, uniformiser), 'Y')[0]

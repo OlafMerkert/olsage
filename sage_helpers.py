@@ -8,7 +8,7 @@ from __future__ import print_function
 from sage.all import *
 from sage.rings.polynomial.polynomial_element import is_Polynomial
 from sage.rings.laurent_series_ring_element import is_LaurentSeries
-
+from sage.rings.polynomial.polynomial_ring import is_PolynomialRing
 import re
 
 # wildcards
@@ -252,7 +252,7 @@ def sqrt_workaround(number):
     if number == 1:
         return 1
     # another trick for symbolic expressions
-    elif number in SR:
+    elif number.parent() == SR:
         m = number.match(w[0]**2)
         if m:
             return w[0].subs(m)
@@ -358,7 +358,7 @@ def laurent_series_sqrt(laurent_series, prec=DEFAULT_SERIES_PREC):
 def laurent_series_infinity_converter(polynomial_or_ring):
     if is_Polynomial(polynomial_or_ring):
         base = polynomial_or_ring.parent().base_ring()
-    elif isinstance(polynomial_or_ring, PolynomialRing):
+    elif is_PolynomialRing(polynomial_or_ring):
         base = polynomial_or_ring.base_ring()
     else:
         base = polynomial_or_ring
