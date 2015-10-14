@@ -342,6 +342,12 @@ def free_polynomial(varlist):
     X = poly_over_varlist(varlist)
     return sum([v * X**i for i, v in enumerate(varlist)])
 
+def poly_subs(poly, var, subs):
+    """helper function to make polynomials out of symbolic expressions."""
+    coeffs = poly.coefficients(var)
+    return sum([c[0] * subs**c[1] for c in coeffs])
+
+
 
 # Laurent series utilities
 
