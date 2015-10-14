@@ -170,9 +170,13 @@ def l(*args):
 
 class ComputableDoubleLinkedList(object):
     """A base class for infinite sequences that get computed on the fly."""
-    def __init__(self, prev=None, next=None):
+    def __init__(self, prev=None, next=None, start=0):
         self._prev = prev
         self._next = next
+        if prev is not None:
+            self._index = prev._index + 1
+        else:
+            self._index = 0
 
     def prev(self):
         if self._prev is None:
