@@ -15,6 +15,14 @@ import re
 w = map(SR.wild, xrange(20))
 
 
+# generating variables
+def var_names(base, count):
+    return [(base + "{0}").format(i) for i in range(count)]
+
+def var_n(base, count):
+    return list(var(var_names(base, count)))
+
+
 # general utilities
 def transpose(list_of_lists):
     return map(list, zip(*list_of_lists))
