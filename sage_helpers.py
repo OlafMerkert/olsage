@@ -389,3 +389,8 @@ def laurent_series_infinity_converter(polynomial_or_ring):
 def polynomial_laurent_sqrt(polynomial, prec=DEFAULT_SERIES_PREC):
     c = laurent_series_infinity_converter(polynomial)
     return laurent_series_sqrt(c(polynomial), prec=prec)
+
+
+# shortcut for working with solve
+def dsolve(expr, var):
+    return solve(expr, var, solution_dict=True)
