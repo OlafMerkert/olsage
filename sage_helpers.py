@@ -406,6 +406,27 @@ def polynomial_laurent_sqrt(polynomial, prec=DEFAULT_SERIES_PREC):
     return laurent_series_sqrt(c(polynomial), prec=prec)
 
 
-# shortcut for working with solve
+# various utilities for working with the symbolic ring
+
 def dsolve(expr, var):
     return solve(expr, var, solution_dict=True)
+
+def subs_map(lst, *sbs):
+    return [l.subs(*sbs) for l in lst]
+
+def subs_n(expr, *sbs):
+    for s in sbs:
+        expr = expr.subs(s)
+    return expr
+
+def subs_nmap(lst, *sbs):
+    return [subs_n(l, *sbs) for l in lst]
+
+def factor0(expr):
+    try:
+        return factor(expr)
+    except ArithmeticError as e:
+        if (e.message == 'Prime factorization of 0 not defined.'):
+            return 0
+        else:
+            raise e
