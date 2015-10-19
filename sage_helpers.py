@@ -308,6 +308,12 @@ def normalise_monic(poly):
 
 # constructing polynomials
 
+def poly_list(var, lst, reverse=False):
+    if reverse:
+        lst = reversed(lst)
+    return sum([var**i * l for i, l in enumerate(lst)])
+
+
 def random_int_monic_polynomial(deg, limit=80, base=QQ):
     """Return a random polynomial with integer coefficients below limit
     (default 80). The third optional parameter may be use to specify a
@@ -350,7 +356,6 @@ def poly_subs(poly, var, subs):
     """helper function to make polynomials out of symbolic expressions."""
     coeffs = poly.coefficients(var)
     return sum([c[0] * subs**c[1] for c in coeffs])
-
 
 
 # Laurent series utilities
