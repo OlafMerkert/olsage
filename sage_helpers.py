@@ -20,7 +20,11 @@ def var_names(base, count):
     return [(base + "{0}").format(i) for i in range(count)]
 
 def var_n(base, count):
-    return list(var(var_names(base, count)))
+    names = var_names(base, count)
+    if len(names) == 1:
+        return [var(names[0])]
+    else:
+        return list(var(names))
 
 
 # general utilities
