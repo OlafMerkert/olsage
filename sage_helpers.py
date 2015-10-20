@@ -409,6 +409,36 @@ def polynomial_laurent_sqrt(polynomial, prec=DEFAULT_SERIES_PREC):
     c = laurent_series_infinity_converter(polynomial)
     return laurent_series_sqrt(c(polynomial), prec=prec)
 
+
+def laurent_series_sqrt_with_lc(series, prec=10, lc=None):
+    T, = series.parent().gens()
+    coeffs = series.coefficients()
+
+    def c(n):
+        if n < len(coeffs):
+            return coeffs[n]
+        else:
+            return 0
+
+    v = series.valuation()
+    assert v % 2 == 0
+
+    b = []
+    if lc is None:
+        lc = sqrt(c(0))
+
+    # F = series.parent().base_ring()
+    # lc = F(lc)
+
+    b.append(lc)
+
+    for k in range(1, prec):
+        # don't optimise the sum yet, it might make trouble
+        s = c(k) - sum([b[i] * b[k-i] for i in range(1, k)])
+        b.append(s/(2*lc))
+
+    return O(T**(v//2 + prec)) + sum([b_n * T**(v//2 + i) for (i, b_n) in enumerate(b)])
+
 
 # various utilities for working with the symbolic ring
 
