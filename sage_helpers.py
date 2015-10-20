@@ -393,7 +393,11 @@ def laurent_series_infinity_converter(polynomial_or_ring):
 
     def convert(x):
         if is_Polynomial(x):
-            return x(1/Z)
+            ret = x(1/Z)
+            if ret == 1:
+                return Integer(1)
+            else:
+                return ret
         else:
             return x
     convert.target = L
