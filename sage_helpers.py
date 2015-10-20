@@ -423,10 +423,7 @@ def subs_nmap(lst, *sbs):
     return [subs_n(l, *sbs) for l in lst]
 
 def factor0(expr):
-    try:
+    if expr == 0:
+        return 0
+    else:
         return factor(expr)
-    except ArithmeticError as e:
-        if (e.message == 'Prime factorization of 0 not defined.'):
-            return 0
-        else:
-            raise e
