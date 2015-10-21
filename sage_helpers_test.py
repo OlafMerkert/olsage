@@ -17,9 +17,9 @@ def test_latex_strip():
 
 
 def test_test_it():
-    print test_it("fail", False, "succeed", True)
-    print test_it("yay", True, "juhu", True)
-    print test_it("oh no", False, "oh my", False, "sh!t", False)
+    print(test_it("fail", False, "succeed", True))
+    print(test_it("yay", True, "juhu", True))
+    print(test_it("oh no", False, "oh my", False, "sh!t", False))
 
 
 def test_complete_square():

@@ -1,0 +1,16 @@
+* olsage
+** utility functions
+My collection of small utility functions for working with sage. Various helpers for 
+
++ setting up lists of variables
++ pretty printing (LaTeX output, or org tables)
++ univariate polynomials and Laurent series
++ generating polynomials
++ square roots of Laurent series
++ doing solving and substitions in =SymbolicRing=
+
+** Height and valuations
+Basic functions for computing
+
++ Gauss norms (even for Laurent series)
++ projective and affine height over the rationals

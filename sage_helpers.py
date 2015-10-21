@@ -62,9 +62,9 @@ def test_it(*args):
         return False, problems
 
 def memoize_instance(f):
-    """Memoize a method, by storing the dict with the already computed
-    results in a slot of the object. We only memoize on the first
-    parameter.
+    """Method decorator: Memoize a method, by storing the dict with the
+    already computed results in a slot of the object. We only memoize
+    on the first parameter.
     """
     slot_name = "_m_" + f.__name__
 
@@ -81,7 +81,8 @@ def memoize_instance(f):
 
 def lazy_property(f):
     """
-    Turn the given method into a readable property, but only do the computation for the first call.
+    Method decorator: Turn the given method into a readable property,
+    but only do the computation for the first call.
     """
     name = f.__name__
     slot_name = "_" + name
