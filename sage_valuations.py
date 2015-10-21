@@ -46,28 +46,36 @@ def normalise_for_prime(prime, *polys):
     else:
         return [f * poly for poly in polys] + [exponent]
 
-
 
 # domain operations
 
 # residue field and related
 def residue_field(field, uniformiser):
+    """
+    Given a field, and a prime in its ring of integers, return the corresponding residue field.
+    """
     R = field.ring_of_integers()
     I = R.ideal(uniformiser)
     return R.quotient(I)
 
 
-def reduced_polynomials(field_or_polynomial_ring, uniformiser):
+def reduced_polynomials(field_or_polynomial_ring, uniformiser, var_name='Y'):
+    """Given a univariate polynomial ring, take the residue field wrt the uniformiser and return a univariate polynomial ring over it."""
     if is_PolynomialRing(field_or_polynomial_ring):
         field = field_or_polynomial_ring.base_ring()
     else:
         field = field_or_polynomial_ring
-    return polynomials(residue_field(field, uniformiser), 'Y')[0]
+    return polynomials(residue_field(field, uniformiser), var_name)[0]
 
 
 # projective and affine heights, also for polynomials
 
 def first_poly2vector(f):
+    """
+    A decorator: If the first argument for the function f is a
+    polynomial, invoke f with the list of coefficients instead. This make
+    any projective or affine height accept also polynomials.
+    """
     def m(poly_or_vector, *args):
         if is_Polynomial(poly_or_vector):
             return f(poly_or_vector.coefficients(), *args)
@@ -77,6 +85,7 @@ def first_poly2vector(f):
 
 @first_poly2vector
 def projective_height(vector, abs_val=lambda x: x.abs()):
+    """The projective exponential height function (works only over the rationals?)."""
     denoms = [v.denominator() for v in vector]
     nums = [v.numerator() for v in vector]
     d = lcm(denoms)
@@ -85,14 +94,17 @@ def projective_height(vector, abs_val=lambda x: x.abs()):
 
 @first_poly2vector
 def projective_global_height(vector, abs_val=lambda x: x.abs()):
+    """The projective logarithmic height function (works only over the rationals?)."""
     # use .numerical_approx() if we want a float
     return log(projective_height(vector, abs_val))
 
 @first_poly2vector
 def affine_height(vector, abs_val=lambda x: x.abs()):
+    """The affine exponential height function (works only over the rationals?)."""
     return projective_height(list(vector) + [Integer(1)], abs_val)
 
 @first_poly2vector
 def affine_global_height(vector, abs_val=lambda x: x.abs()):
+    """The affine logarithmic height function (works only over the rationals?)."""
     # use .numerical_approx() if we want a float
     return log(affine_height(vector, abs_val))
