@@ -518,30 +518,22 @@ def laurent_series_sqrt_with_lc(series, prec=10, lc=None):
     polynomial (i.e. already has an O(X^m) term).
     """
     T, = series.parent().gens()
-    coeffs = series.coefficients()
-
-    def c(n):
-        if n < len(coeffs):
-            return coeffs[n]
-        else:
-            return 0
-
     v = series.valuation()
     assert v % 2 == 0
+
+    def c(n):
+        return series[v + n]
 
     b = []
     if lc is None:
         lc = sqrt(c(0))
-
-    # F = series.parent().base_ring()
-    # lc = F(lc)
 
     b.append(lc)
 
     for k in range(1, prec):
         # don't optimise the sum yet, it might make trouble
         s = c(k) - sum([b[i] * b[k-i] for i in range(1, k)])
-        b.append(s/(2*lc))
+        b.append(poly_clear_constants(s/(2*lc)))
 
     return O(T**(v//2 + prec)) + sum([b_n * T**(v//2 + i) for (i, b_n) in enumerate(b)])
 
