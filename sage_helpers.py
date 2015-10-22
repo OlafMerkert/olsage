@@ -493,6 +493,22 @@ def polynomial_laurent_sqrt(polynomial, prec=DEFAULT_SERIES_PREC):
     return laurent_series_sqrt(c(polynomial), prec=prec)
 
 
+def poly_clear_constants(polynomial_fraction):
+    """
+    Sage calls reduce on polynomials, but this does not kill common
+    constant factors. So we divide both numerator and denominator by
+    the common content.
+    """
+    num_content = polynomial_fraction.numerator().content()
+    den_content = polynomial_fraction.denominator().content()
+    # this gcd works also for rational expressions.
+    g = gcd(num_content, den_content)
+    num_new = polynomial_fraction.numerator() / g
+    den_new = polynomial_fraction.denominator() / g
+    # print("debug num = {0}, den = {1}".format(num_new, den_new))
+    return num_new / den_new
+
+
 def laurent_series_sqrt_with_lc(series, prec=10, lc=None):
     """Use this function to compute a square root of a Laurent series if
     sage cannot figure out what the leading coefficient of the sqrt
