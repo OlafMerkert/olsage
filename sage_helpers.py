@@ -545,9 +545,11 @@ def dsolve(expr, var):
     equations."""
     return solve(expr, var, solution_dict=True)
 
+
 def subs_map(lst, *sbs):
     """Apply the substitutions for every item in lst."""
     return [l.subs(*sbs) for l in lst]
+
 
 def subs_n(expr, *sbs):
     """Apply the given substitutions one after the other on the expression."""
@@ -555,9 +557,11 @@ def subs_n(expr, *sbs):
         expr = expr.subs(s)
     return expr
 
+
 def subs_nmap(lst, *sbs):
     """Apply the given substitutions one after the other for every item in lst."""
     return [subs_n(l, *sbs) for l in lst]
+
 
 def factor0(expr):
     """Instead of producing an error message when factoring 0, just return
@@ -567,3 +571,22 @@ def factor0(expr):
         return 0
     else:
         return factor(expr)
+
+
+def psolve(polys, variables, solution_field=None):
+    """
+    Given a list of polynomials and variables, solve the equations poly
+    = 0 for the variables. Return a dictionary with the solutions, if any
+    are found.
+    """
+    if solution_field is None:
+        solution_field = polys[0].parent().fraction_field()
+    sp = map(SR, polys)
+    sv = map(SR, variables)
+    ssol = dsolve(sp, sv)
+    # print("debug solutions {0}".format(ssol))
+    psol = []
+    for sol in ssol:
+        psl = map(solution_field, subs_map(sv, sol))
+        psol.append({x:y for (x, y) in zip(variables, psl)})
+    return psol
