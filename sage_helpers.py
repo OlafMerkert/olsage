@@ -601,6 +601,42 @@ def num_simpl(x):
     c = n.content()
     return n/c
 
+def eq_resolve(co, var, choice=0, full=True):
+    """
+    Take the len(var) first equations in co, and solve them for
+    everything in var, the resubstitute the solution selected by
+    choice into the equations, and unless full==False, full_simplify
+    the results. Return the solution_dict and the still to be solved
+    equations.
+    """
+    l = len(var)
+    if l == 1:
+        var = var[0]
+    print("debug l = {0}".format(l))
+    sol = dsolve(co[:l], var)
+    print(sol)
+    simpm = lambda x: x.full_simplify()
+    co_solved = map(simpm, subs_map(co[:l], sol[choice]))
+    print(co_solved)
+    if not full:
+        simpm = lambda x: x.simplify()
+    co_new = map(simpm, subs_map(co[l:], sol[choice]))
+    lrepr(co_new)
+    return sol, co_new
+
+def eq_replace(co, s, full=True):
+    """
+    Allow manual substitution into a list of equations, with the same
+    interface as eq_resolve.
+    """
+    if full:
+        simpm = lambda x: x.full_simplify()
+    else:
+        simpm = lambda x: x.simplify()
+    co_new = [simpm(x.subs(s)) for x in co]
+    lrepr(co_new)
+    return s, co_new
+
 
 # linear terms in polynomials
 linear_terms_variables = []
