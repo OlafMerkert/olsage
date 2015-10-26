@@ -618,7 +618,9 @@ def eq_resolve(co, var, choice=0, full=True):
     simpm = lambda x: x.full_simplify()
     co_solved = map(simpm, subs_map(co[:l], sol[choice]))
     print(co_solved)
-    if not full:
+    if full is None:
+        simpm = lambda x: x
+    elif not full:
         simpm = lambda x: x.simplify()
     co_new = map(simpm, subs_map(co[l:], sol[choice]))
     lrepr(co_new)
