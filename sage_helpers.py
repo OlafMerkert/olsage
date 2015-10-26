@@ -624,6 +624,7 @@ def eq_resolve(co, var, choice=0, full=True):
     lrepr(co_new)
     return sol, co_new
 
+
 def eq_replace(co, s, full=True):
     """
     Allow manual substitution into a list of equations, with the same
@@ -636,6 +637,11 @@ def eq_replace(co, s, full=True):
     co_new = [simpm(x.subs(s)) for x in co]
     lrepr(co_new)
     return s, co_new
+
+
+def eq_from_coeff(expr, v, start, end):
+    assert start <= end
+    return [x[0] for x in expr.coefficients(v) if start <= x[1] < end]
 
 
 # linear terms in polynomials
