@@ -588,5 +588,16 @@ def psolve(polys, variables, solution_field=None):
     psol = []
     for sol in ssol:
         psl = map(solution_field, subs_map(sv, sol))
-        psol.append({x:y for (x, y) in zip(variables, psl)})
+        psol.append({x: y for (x, y) in zip(variables, psl)})
     return psol
+
+def num_simpl(x):
+    """
+    Take the numerator of an expression, and divide by its content.
+    This produces the minimal equation required to solve, if we want
+    some rational function to vanish.
+    """
+    n = x.numerator()
+    c = n.content()
+    return n/c
+
