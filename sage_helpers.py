@@ -601,3 +601,31 @@ def num_simpl(x):
     c = n.content()
     return n/c
 
+
+# linear terms in polynomials
+linear_terms_variables = []
+
+def linear_terms(expr):
+    """
+    List all elements of linear_terms_variables which appear only as a
+    linear term in expr.
+    """
+    return [v for v in linear_terms_variables if expr.degree(v) == 1]
+
+def linear_term_complexity(expr, v):
+    """
+    For a given variable, compute the complexity of its linear
+    coefficient by counting variables appearing in it.
+    """
+    mons = expr.coefficient(v).monomials()
+    return sum([x.degree() for x in mons])
+
+def linear_term_complexity_chart(expr):
+    """
+    Produce a list of the variables appearing as linear term in expr,
+    sorted by the complexity of their coefficient.
+    """
+    lt = linear_terms(expr)
+    ltc = [[l, linear_term_complexity(expr, l)] for l in lt]
+    ltc.sort(key=lambda x: x[1])
+    return ltc
