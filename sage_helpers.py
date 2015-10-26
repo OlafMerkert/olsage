@@ -654,6 +654,7 @@ def linear_terms(expr):
     List all elements of linear_terms_variables which appear only as a
     linear term in expr.
     """
+    global linear_terms_variables
     return [v for v in linear_terms_variables if expr.degree(v) == 1]
 
 def linear_term_complexity(expr, v):
