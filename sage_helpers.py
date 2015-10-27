@@ -499,12 +499,20 @@ def poly_clear_constants(polynomial_fraction):
     constant factors. So we divide both numerator and denominator by
     the common content.
     """
-    num_content = polynomial_fraction.numerator().content()
-    den_content = polynomial_fraction.denominator().content()
+    num_new = polynomial_fraction.numerator()
+    den_new = polynomial_fraction.denominator()
+    if is_Polynomial(num_new):
+        num_content = num_new.content()
+    else:
+        num_content = Integer(1)
+    if is_Polynomial(den_new):
+        den_content = den_new.content()
+    else:
+        den_content = Integer(1)
     # this gcd works also for rational expressions.
     g = gcd(num_content, den_content)
-    num_new = polynomial_fraction.numerator() / g
-    den_new = polynomial_fraction.denominator() / g
+    num_new = num_new / g
+    den_new = den_new / g
     # print("debug num = {0}, den = {1}".format(num_new, den_new))
     return num_new / den_new
 
