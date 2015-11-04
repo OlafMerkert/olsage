@@ -528,7 +528,7 @@ def poly_clear_constants(polynomial_fraction):
     return num_new / den_new
 
 
-def laurent_series_sqrt_with_lc(series, prec=10, lc=None):
+def laurent_series_sqrt_with_lc(series, prec=10, lc=None, clear_constants=True):
     """Use this function to compute a square root of a Laurent series if
     sage cannot figure out what the leading coefficient of the sqrt
     should be -- you may supply it a parameter lc. The prec controls
@@ -552,7 +552,10 @@ def laurent_series_sqrt_with_lc(series, prec=10, lc=None):
     for k in range(1, prec):
         # don't optimise the sum yet, it might make trouble
         s = c(k) - sum([b[i] * b[k-i] for i in range(1, k)])
-        b.append(poly_clear_constants(s/(2*lc)))
+        s = s/(2*lc)
+        if clear_constants:
+            s = poly_clear_constants(s)
+        b.append(s)
 
     return O(T**(v//2 + prec)) + sum([b_n * T**(v//2 + i) for (i, b_n) in enumerate(b)])
 
