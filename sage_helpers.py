@@ -696,3 +696,21 @@ def linear_term_complexity_chart(expr):
     ltc = [[l, linear_term_complexity(expr, l)] for l in lt]
     ltc.sort(key=lambda x: x[1])
     return ltc
+
+
+# linear algebra
+def solve_u_r1(m):
+    """
+    Given an upper triangular matrix of full rank with n-1 rows and n
+    columns, compute a generator of the the right kernel putting the
+    last variable to 1.
+    """
+    solution = [Integer(1)]
+    n = m.nrows()
+    for i in reversed(range(n)):
+        # we are in the row with index i (from the top), so the
+        # first non-zero cell is in column i
+        row = m[i]
+        val = - row[i+1:].inner_product(vector(solution)) / row[i]
+        solution.insert(0, val)
+    return vector(solution)

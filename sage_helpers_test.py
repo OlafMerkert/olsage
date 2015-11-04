@@ -27,3 +27,10 @@ def test_complete_square():
     rem = X**3 + X**2 + X
     r = complete_square(ex1**2 + rem)
     print(sq - r[0], rem - r[1])
+
+
+def test_solve_u_r1():
+    m = Matrix([[2, 1, 3],
+                [0, 3, 1]])
+    v = solve_u_r1(m)
+    print(m * v)
