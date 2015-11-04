@@ -139,6 +139,17 @@ def trepr(lst, repr=True):
     if ret:
         return lst
 
+
+def mrepr(m):
+    """Visualise the structure of a matrix containing complicated formulas."""
+    def r(x):
+        if x in QQ:
+            return str(x)
+        else:
+            return "**"
+    print(m.str(rep_mapping=r))
+
+
 def fn_labels(repl="", tex=""):
     """A simple decorator to add table headers to functions (or methods),
     which should simplify table building even further.
