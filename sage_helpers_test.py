@@ -34,3 +34,16 @@ def test_solve_u_r1():
                 [0, 3, 1]])
     v = solve_u_r1(m)
     print(m * v)
+
+def test_quotient_compatible():
+    f = quotient_compatible(lambda x, y: (x + y))
+    R, X = polynomials(0)
+    Rq = R.quotient(ideal(X))
+    print("quotient ring {0}".format(Rq))
+    r1 = Rq(X + 7)
+    r2 = Rq(X**2 + 3 * X + 19)
+    print("r1 = {0}, r2 = {1} with parent {2}".format(r1, r2, r1.parent()))
+    s1 = r1 + r2
+    print("quotient sum {0} with parent {1}".format(s1, s1.parent()))
+    s2 = f(r1, r2)
+    print("lift sum {0} with parent {1}".format(s2, s2.parent()))

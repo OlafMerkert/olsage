@@ -714,3 +714,40 @@ def solve_u_r1(m):
         val = - row[i+1:].inner_product(vector(solution)) / row[i]
         solution.insert(0, val)
     return vector(solution)
+
+
+# quotients
+
+def ensure_non_quotient(x):
+    """If required, lift the element."""
+    if hasattr(x, 'lift'): # duck typing ;-)
+        return x.lift()
+    else:
+        return x
+
+def quotient_compatible(f):
+    """
+    For all parameters of the function, lift them out of a QuotientRing
+    if necessary.
+    """
+    def fun(*args):
+        args_new = map(ensure_non_quotient, args)
+        return f(*args_new)
+
+    return fun
+
+
+# measuring and visualising complexity of polynomials
+
+@quotient_compatible
+def poly_complexity(ref):
+    """Add up the degrees of all the monomials """
+    # need to add 1, otherwise constant polynomials return zero as well
+    if ref == 0:
+        return 0
+    else:
+        return 1 + sum([x.degree() for x in ref.monomials()])
+
+def mcplx_repr(m):
+    print(m.str(rep_mapping=lambda x: str(poly_complexity(x))))
+    return sum([poly_complexity(x) for x in m.list()])
