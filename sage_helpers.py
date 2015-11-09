@@ -721,7 +721,12 @@ def solve_u_r1(m):
 
 def ensure_non_quotient(x):
     """If required, lift the element."""
-    if hasattr(x, 'lift'): # duck typing ;-)
+    if is_MPolynomial(x):
+        return x
+    elif is_Polynomial(x):
+        return x
+    elif hasattr(x, 'lift'):  # duck typing ;-)
+        print("debug have to lift {0}".format(x))
         return x.lift()
     else:
         return x
