@@ -7,6 +7,7 @@
 from __future__ import print_function
 from sage.all import *
 from sage.rings.polynomial.polynomial_element import is_Polynomial
+from sage.rings.polynomial.multi_polynomial_element import is_MPolynomial
 from sage.rings.laurent_series_ring_element import is_LaurentSeries
 from sage.rings.polynomial.polynomial_ring import is_PolynomialRing
 import re
@@ -749,5 +750,38 @@ def poly_complexity(ref):
         return 1 + sum([x.degree() for x in ref.monomials()])
 
 def mcplx_repr(m):
+    """
+    Print out a matrix of polynomials, visualising the complexity of the cell contents.
+    """
     print(m.str(rep_mapping=lambda x: str(poly_complexity(x))))
     return sum([poly_complexity(x) for x in m.list()])
+
+
+# working with sets of polynomial equations
+
+def pairwise_gcds(lst1, lst2=None):
+    """
+    Given one list, print out all non-trivial common divisors of pairs
+    of list elements. Given two lists, print out all non-trivial
+    common divisors of elements of the cartesian product.
+    """
+    if lst2 is None:
+        lst2 = lst1
+        all = False
+    else:
+        all = True
+    for i, l1 in enumerate(lst1):
+        for j, l2 in enumerate(lst2):
+            if (all or i < j):
+                g = gcd(l1, l2)
+                if g != 1:
+                    print("i = {0}, j = {1}, gcd = {2}".format(i, j, g))
+
+def collect_factors(lst):
+    """
+    Given a list of polynomials, produce the list of irreducible
+    factors occuring in all of them.
+    """
+    factor_list = list(set(flatten([[y[0] for y in x.factor()] for x in lst if x not in QQ])))
+    factor_list.sort(key=poly_complexity)
+    return factor_list
