@@ -787,6 +787,10 @@ def collect_factors(lst):
     Given a list of polynomials, produce the list of irreducible
     factors occuring in all of them.
     """
-    factor_list = list(set(flatten([[y[0] for y in x.factor()] for x in lst if x not in QQ])))
+    factor_list = flatten([[y[0] for y in factor(x)] for x in lst if x not in QQ])
+    # make sure there is no trouble with signs
+    factor_list = [factor(x)[0][0] for x in factor_list]
+    # print("debug factors {0}".format(factor_list))
+    factor_list = list(set(factor_list))
     factor_list.sort(key=poly_complexity)
     return factor_list
