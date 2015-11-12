@@ -5,7 +5,21 @@
 
 # imports
 from __future__ import print_function
-from sage.all import *
+from sage.all import (QQ,
+                      SR,
+                      Integer,
+                      vector,
+                      gcd,
+                      factor,
+                      flatten,
+                      PolynomialRing,
+                      LaurentSeriesRing,
+                      gens,
+                      var,
+                      latex,
+                      sqrt,
+                      solve,
+                      O)
 from sage.rings.polynomial.polynomial_element import is_Polynomial
 from sage.rings.polynomial.multi_polynomial_element import is_MPolynomial
 from sage.rings.laurent_series_ring_element import is_LaurentSeries

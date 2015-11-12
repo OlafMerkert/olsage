@@ -1,7 +1,16 @@
 # -*- coding: utf-8; sage: t -*-
 
 from __future__ import print_function
-from sage_helpers import *
+from sage.all import (valuation,
+                      infinity,
+                      lcm,
+                      gcd,
+                      log,
+                      Integer)
+from sage_helpers import (is_Polynomial,
+                          is_LaurentSeries,
+                          is_PolynomialRing,
+                          polynomials)
 
 
 # computing Gauss norms
@@ -84,27 +93,27 @@ def first_poly2vector(f):
     return m
 
 @first_poly2vector
-def projective_height(vector, abs_val=lambda x: x.abs()):
+def projective_height(projective_point, abs_val=lambda x: x.abs()):
     """The projective exponential height function (works only over the rationals?)."""
-    denoms = [v.denominator() for v in vector]
-    nums = [v.numerator() for v in vector]
+    denoms = [v.denominator() for v in projective_point]
+    nums = [v.numerator() for v in projective_point]
     d = lcm(denoms)
     g = gcd(nums)
-    return abs_val(d)/abs_val(g) * max([abs_val(v) for v in vector])
+    return abs_val(d)/abs_val(g) * max([abs_val(v) for v in projective_point])
 
 @first_poly2vector
-def projective_global_height(vector, abs_val=lambda x: x.abs()):
+def projective_global_height(projective_point, abs_val=lambda x: x.abs()):
     """The projective logarithmic height function (works only over the rationals?)."""
     # use .numerical_approx() if we want a float
-    return log(projective_height(vector, abs_val))
+    return log(projective_height(projective_point, abs_val))
 
 @first_poly2vector
-def affine_height(vector, abs_val=lambda x: x.abs()):
+def affine_height(affine_point, abs_val=lambda x: x.abs()):
     """The affine exponential height function (works only over the rationals?)."""
-    return projective_height(list(vector) + [Integer(1)], abs_val)
+    return projective_height(list(affine_point) + [Integer(1)], abs_val)
 
 @first_poly2vector
-def affine_global_height(vector, abs_val=lambda x: x.abs()):
+def affine_global_height(affine_point, abs_val=lambda x: x.abs()):
     """The affine logarithmic height function (works only over the rationals?)."""
     # use .numerical_approx() if we want a float
-    return log(affine_height(vector, abs_val))
+    return log(affine_height(affine_point, abs_val))
