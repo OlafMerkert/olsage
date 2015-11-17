@@ -392,6 +392,42 @@ def normalise_monic(poly):
         return 1
 
 
+# building multivariate polynomial rings
+
+def multivar_polynomials_vars(var_desc):
+    def expand_var_desc(vd):
+        if isinstance(vd, list):
+            return apply(var_names, vd)
+        else:
+            return vd
+    return flatten(map(expand_var_desc, var_desc))
+
+def multivar_polynomials_destruct(var_desc, g):
+    start = 0
+    return_list = []
+    for vd in var_desc:
+        if not isinstance(vd, list):
+            return_list.append(g[start])
+            start += 1
+        else:
+            if len(vd) == 2:
+                l = vd[1]
+                pre = []
+            else:
+                l = vd[2] - vd[1]
+                pre = [0] * vd[1]
+            return_list.append(pre + g[start:start+l])
+            start += l
+    return return_list
+
+def multivar_polynomials(field_or_char, var_desc, **args):
+    field = ensure_field(field_or_char)
+    vn_list = multivar_polynomials_vars(var_desc)
+    ring = PolynomialRing(field, vn_list, **args)
+    g = list(ring.gens())
+    return [ring] + multivar_polynomials_destruct(var_desc, g)
+
+
 # constructing polynomials
 
 def poly_list(var, lst, reverse=False):
