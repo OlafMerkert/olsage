@@ -307,18 +307,22 @@ class ComputableDoubleLinkedList(object):
 
 # polynomial helpers
 
-def polynomials(field_or_char=0, var='X'):
-    """Return a univariate PolynomialRing over the given field (or ring),
-    and its variable (with given name). Instead of a field, one may
-    give a characteristic, in which case the minimal field of said
-    characteristic is used as the base.
-    """
+def ensure_field(field_or_char):
     if field_or_char == 0:
         field = QQ
     elif isinstance(field_or_char, int):
         field = GF(field_or_char)
     else:
         field = field_or_char
+    return field
+
+def polynomials(field_or_char=0, var='X'):
+    """Return a univariate PolynomialRing over the given field (or ring),
+    and its variable (with given name). Instead of a field, one may
+    give a characteristic, in which case the minimal field of said
+    characteristic is used as the base.
+    """
+    field = ensure_field(field_or_char)
     polynomials = PolynomialRing(field, var)
     return polynomials, gens(polynomials)[0]
 
@@ -454,12 +458,7 @@ def Laurent_series(field_or_char=0, var='Z'):
     one may supply a characteristic, in which case the minimal field
     of said characteristic is used for the base.
     """
-    if field_or_char == 0:
-        field = QQ
-    elif isinstance(field_or_char, int):
-        field = GF(field_or_char)
-    else:
-        field = field_or_char
+    field = ensure_field(field_or_char)
     laurent_series = LaurentSeriesRing(field, var)
     return laurent_series, gens(laurent_series)[0]
 
