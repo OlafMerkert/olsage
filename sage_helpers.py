@@ -778,7 +778,7 @@ def mcplx_repr(m):
 
 # working with sets of polynomial equations
 
-def pairwise_gcds(lst1, lst2=None):
+def pairwise_gcds(lst1, lst2=None, verbose=True, collect=False):
     """
     Given one list, print out all non-trivial common divisors of pairs
     of list elements. Given two lists, print out all non-trivial
@@ -789,12 +789,37 @@ def pairwise_gcds(lst1, lst2=None):
         all = False
     else:
         all = True
+    mapping = []
     for i, l1 in enumerate(lst1):
         for j, l2 in enumerate(lst2):
             if (all or i < j):
                 g = gcd(l1, l2)
                 if g != 1:
-                    print("i = {0}, j = {1}, gcd = {2}".format(i, j, g))
+                    if verbose:
+                        print("i = {0}, j = {1}, gcd = {2}".format(i, j, g))
+                    if collect:
+                        mapping.append([i, j, g])
+    if collect:
+        return mapping
+
+def bijection_p(lst, n=None):
+    """Given a list of two element lists containing integers from
+    range(n), test if they give a bijection of these numbers."""
+    if n is None:
+        n = len(lst)
+    r1 = n * [False]
+    r2 = n * [False]
+    # just test if every number appears once in the first and the second list.
+    for l in lst:
+        if not l[0] < n or not l[1] < n:
+            return False
+        r1[l[0]] = True
+        r2[l[1]] = True
+    return reduce(lambda x, y: x and y, r1 + r2)
+
+def pairwise_gcds_bijection(lst1, lst2):
+    assert len(lst1) == len(lst2)
+    return bijection_p(pairwise_gcds(lst1, lst2, verbose=False, collect=True), n=len(lst1))
 
 def collect_factors(lst):
     """

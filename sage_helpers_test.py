@@ -47,3 +47,9 @@ def test_quotient_compatible():
     print("quotient sum {0} with parent {1}".format(s1, s1.parent()))
     s2 = f(r1, r2)
     print("lift sum {0} with parent {1}".format(s2, s2.parent()))
+
+def test_bijection_p():
+    bijection_p([[0, 0], [1, 1], [2, 2]]) == True
+    bijection_p([[0, 0], [1, 1], [2, 3]]) == False
+    bijection_p([[0, 0], [1, 1], [2, 3], [3, 2]]) == True
+    bijection_p([[0, 0], [1, 1], [2, 2], [2, 2]]) == False
