@@ -634,6 +634,10 @@ def subs_nmap(lst, *sbs):
     """Apply the given substitutions one after the other for every item in lst."""
     return [subs_n(l, *sbs) for l in lst]
 
+def subs_in_unipoly(poly, *sbs):
+    deg = poly.degree() + 1
+    new_coeff = subs_nmap([poly[i] for i in range(deg)], *sbs)
+    return poly_list(poly.parent().gens()[0], new_coeff)
 
 def factor0(expr):
     """Instead of producing an error message when factoring 0, just return
