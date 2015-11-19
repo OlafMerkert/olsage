@@ -675,7 +675,10 @@ def num_simpl(x):
     """
     n = x.numerator()
     c = n.content()
-    return n/c
+    if c == 0:
+        return n
+    else:
+        return n/c
 
 def eq_resolve(co, var, choice=0, full=True):
     """
@@ -779,7 +782,7 @@ def ensure_non_quotient(x):
     elif is_Polynomial(x):
         return x
     elif hasattr(x, 'lift'):  # duck typing ;-)
-        print("debug have to lift {0}".format(x))
+        # print("debug have to lift {0}".format(x))
         return x.lift()
     else:
         return x
