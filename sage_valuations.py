@@ -6,11 +6,13 @@ from sage.all import (valuation,
                       lcm,
                       gcd,
                       log,
-                      Integer)
+                      Integer,
+                      QQ)
 from sage_helpers import (is_Polynomial,
                           is_LaurentSeries,
                           is_PolynomialRing,
                           polynomials)
+from sage.rings.number_field.number_field import is_NumberField
 
 
 # computing Gauss norms
@@ -65,7 +67,10 @@ def residue_field(field, uniformiser):
     """
     R = field.ring_of_integers()
     I = R.ideal(uniformiser)
-    return R.quotient(I)
+    if not field == QQ and is_NumberField(field):
+        return R.quotient(I, "zeta")
+    else:
+        return R.quotient(I)
 
 
 def reduced_polynomials(field_or_polynomial_ring, uniformiser, var_name='Y'):
