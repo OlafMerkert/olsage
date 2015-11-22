@@ -639,6 +639,12 @@ def subs_in_unipoly(poly, *sbs):
     new_coeff = subs_nmap([poly[i] for i in range(deg)], *sbs)
     return poly_list(poly.parent().gens()[0], new_coeff)
 
+def subs_in_unipoly1(poly, X, *sbs):
+    deg = poly.degree() + 1
+    new_coeff = subs_nmap([poly[i] for i in range(deg)], *sbs)
+    return poly_list(X, new_coeff)
+
+
 def factor0(expr):
     """Instead of producing an error message when factoring 0, just return
     0. This is very useful in conjunction with map or list
