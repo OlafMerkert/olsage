@@ -573,6 +573,13 @@ def polynomial_laurent_sqrt(polynomial, prec=DEFAULT_SERIES_PREC):
     c = laurent_series_infinity_converter(polynomial)
     return laurent_series_sqrt(c(polynomial), prec=prec)
 
+def principal_content(expr):
+    if is_Polynomial(expr):
+        gs = expr.content().gens()
+        assert len(gs) <= 1
+        return gs[0]
+    else:
+        return Integer(1)
 
 def poly_clear_constants(polynomial_fraction):
     """
@@ -582,16 +589,12 @@ def poly_clear_constants(polynomial_fraction):
     """
     num_new = polynomial_fraction.numerator()
     den_new = polynomial_fraction.denominator()
-    if is_Polynomial(num_new):
-        num_content = num_new.content()
-    else:
-        num_content = Integer(1)
-    if is_Polynomial(den_new):
-        den_content = den_new.content()
-    else:
-        den_content = Integer(1)
+    num_content = principal_content(num_new)
+    den_content = principal_content(den_new)
+    # print("debug num_content = {0}, den_content = {1}".format(num_content, den_content))
     # this gcd works also for rational expressions.
     g = gcd(num_content, den_content)
+    # print("debug gcd = {0}, parent = {1}".format(g, g.parent()))
     num_new = num_new / g
     den_new = den_new / g
     # print("debug num = {0}, den = {1}".format(num_new, den_new))
