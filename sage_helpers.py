@@ -175,6 +175,21 @@ def fn_labels(repl="", tex=""):
         return f
     return dec
 
+def dollar_wrap(string):
+    if isinstance(string, str):
+        if not string[0] == "$":
+            string = "$" + string
+        if not string[-1] == "$":
+            string = string + "$"
+    return string
+
+
+def multi_map(fn, lst):
+    if isinstance(lst, list):
+        return [multi_map(fn, x) for x in lst]
+    else:
+        return fn(lst)
+
 def table_builder(header, sep, contents):
     """Produce table output, to be used with org-babel. If sep is True,
     insert a horizontal line before the table body. If header is True,
@@ -205,11 +220,14 @@ def table_builder(header, sep, contents):
     body_list = zip(*body_list)
     if sep:
         body_list = sep_list + body_list
-    if header == "latex":
+    if header == "latex" or header == "latexwrap":
         body_list = [latex_header_list] + body_list
     elif header:
         body_list = [header_list] + body_list
-    return body_list
+    if header == "latexwrap":
+        return multi_map(dollar_wrap, body_list)
+    else:
+        return body_list
 
 
 # producing latex output
