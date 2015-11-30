@@ -57,6 +57,27 @@ def normalise_for_prime(prime, *polys):
     else:
         return [f * poly for poly in polys] + [exponent]
 
+def series_reduced_valuation(series, prime):
+    i = series.valuation()
+    v = 1
+    while v > 0:
+        v = valuation(series[i], prime)
+        i += 1
+    return i-1
+
+def poly_reduced_degree(poly, prime):
+    if is_Polynomial(poly):
+        i = poly.degree()
+        v = 1
+        while v > 0:
+            v = valuation(poly[i], prime)
+            i -= 1
+        return i+1
+    elif valuation(poly, prime) > 0:
+        return -infinity
+    else:
+        return 0
+
 
 # domain operations
 
