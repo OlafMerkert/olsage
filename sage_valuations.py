@@ -68,7 +68,7 @@ def residue_field(field, uniformiser):
     R = field.ring_of_integers()
     I = R.ideal(uniformiser)
     if not field == QQ and is_NumberField(field):
-        return R.quotient(I, "zeta")
+        return field.residue_field(uniformiser)
     else:
         return R.quotient(I)
 
