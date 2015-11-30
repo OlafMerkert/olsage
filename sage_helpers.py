@@ -190,6 +190,8 @@ def table_builder(header, sep, contents):
     header_list = []
     latex_header_list = []
     body_list = []
+    # separator = "--"
+    # separator = None
     for (label, latex_label, content) in contents:
         if isinstance(label, tuple):
             header_list.extend(label)
@@ -199,7 +201,7 @@ def table_builder(header, sep, contents):
             header_list.append(label)
             latex_header_list.append(latex_label)
             body_list.append(content)
-    sep_list = [["--"] * len(header_list)]
+    sep_list = [None]  # [[separator] * len(header_list)]
     body_list = zip(*body_list)
     if sep:
         body_list = sep_list + body_list
