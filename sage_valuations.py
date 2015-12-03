@@ -69,7 +69,7 @@ def poly_reduced_degree(poly, prime):
     if is_Polynomial(poly):
         i = poly.degree()
         v = 1
-        while v > 0:
+        while v > 0 and i >= 0:
             v = valuation(poly[i], prime)
             i -= 1
         return i+1
