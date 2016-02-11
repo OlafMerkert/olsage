@@ -278,14 +278,14 @@ class ComputableDoubleLinkedList(object):
 
     def prev(self):
         if self._prev is None:
-            raise IndexError
+            raise IndexError("No prev at {0}".format(self._index))
         elif self._prev is Ellipsis:
             self._prev = self.compute_prev()
         return self._prev
 
     def next(self):
         if self._next is None:
-            raise IndexError
+            raise IndexError("No next at {0}".format(self._index))
         elif self._next is Ellipsis:
             self._next = self.compute_next()
         return self._next
@@ -322,7 +322,7 @@ class ComputableDoubleLinkedList(object):
                 element = element.prev()
             return element
         else:
-            raise IndexError
+            raise IndexError("No item at {0}".format(i))
 
 
 # polynomial helpers
