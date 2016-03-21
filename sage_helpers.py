@@ -677,6 +677,14 @@ def factor0(expr):
     else:
         return factor(expr)
 
+def irr_factors(expr):
+    """Return a list of all the irreducible factors in expression, without
+    accounting for multiplicity."""
+    if expr == 0:
+        return []
+    else:
+        return [f[0] for f in factor(expr)]
+
 
 def psolve(polys, variables, solution_field=None):
     """
