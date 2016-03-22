@@ -382,9 +382,11 @@ def sqrt_workaround(number):
 
 
 def complete_square(poly):
-    """we expect an univariate polynomial of even degree, where the
+    """We expect an univariate polynomial of even degree, where the
     leading coefficient is a square, then we try to find a polynomial
-    whose square is as close as possible to thte original polynomial."""
+    whose square is as close as possible to the original polynomial.
+    Return two values, the first being the polynomial best
+    approximating the square root, the second being the rest."""
     a = poly
     x, = gens(poly.parent())
     deg = poly.degree()
@@ -665,8 +667,11 @@ def subs_in_unipoly(poly, *sbs):
 def subs_in_unipoly1(poly, X, *sbs):
     deg = poly.degree() + 1
     new_coeff = subs_nmap([poly[i] for i in range(deg)], *sbs)
-    return poly_list(X, new_coeff)
-
+    # make sure the coefficients are contained in the right ring. This
+    # is an issue if the base ring of X is contained in the original
+    # domain (and no automatic coercion takes place?)
+    rng = X.parent().base_ring()
+    return poly_list(X, map(rng, new_coeff))
 
 def factor0(expr):
     """Instead of producing an error message when factoring 0, just return
