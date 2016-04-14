@@ -690,6 +690,24 @@ def irr_factors(expr):
     else:
         return [f[0] for f in factor(expr)]
 
+def denom_irr_factors(expr):
+    """Return a list of all the irreducible factors with negative
+    multiplicity in expression, without accounting for
+    multiplicity."""
+    if expr == 0:
+        return []
+    else:
+        return [f[0] for f in factor(expr) if f[1] < 0]
+
+def numer_irr_factors(expr):
+    """Return a list of all the irreducible factors with positive
+    multiplicity in expression, without accounting for
+    multiplicity."""
+    if expr == 0:
+        return []
+    else:
+        return [f[0] for f in factor(expr) if f[1] > 0]
+
 
 def psolve(polys, variables, solution_field=None):
     """
