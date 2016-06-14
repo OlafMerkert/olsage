@@ -10,6 +10,10 @@
 from __future__ import print_function
 from sage.all import (latex)
 from sage_helpers import latex_strip
+from sage.rings.number_field.number_field import is_NumberField
+from sage.rings.fraction_field import is_FractionField
+from sage.rings.polynomial.polynomial_ring import is_PolynomialRing
+
 
 
 # basic latex output
@@ -49,3 +53,29 @@ def ll_common_denominator(f):
         return "\\frac{" + ll_raw(cd * f) + "}{" + ll_raw(factor(cd)) + "}"
     else:
         return ll_raw(f)
+
+
+# formatting various standard sage objects
+
+
+class UnknownField():
+    pass
+
+def field_format(field):
+    # print("debug field = {0}".format(field))
+    if field == QQ:
+        return ll("\\Q")
+    elif is_NumberField(field):
+        minpoly = field.defining_polynomial()
+        g, = field.gens()
+        # G, = minpoly.parent().gens()
+        return ll("K = \\Q(", g, ")") + ", where " + ll( g) + " has minimal polynomial " + ll(minpoly)
+    elif is_FractionField(field):
+        ring = field.ring_of_integers()
+        if is_PolynomialRing(ring):
+            return ll("\\C(", ring.gens()[0], ")")
+        else:
+            print("debug ring =  {0}".format(ring))
+            raise UnknownField()
+    else:
+        raise UnknownField()
