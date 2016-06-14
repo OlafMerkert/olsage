@@ -109,6 +109,17 @@ def lazy_property(f):
 
     return property(m)
 
+def once_only_method(f):
+    """A decorator to make sure a method gets called just once (per object)."""
+    called = {}
+    def m(x, *args):
+        if x in called:
+            return None
+        else:
+            called[x] = True
+            return f(x, *args)
+    return m
+
 
 # pretty printing
 def srepr(item, repr=True):
