@@ -872,12 +872,14 @@ def quotient_compatible(f):
 
 # measuring and visualising complexity of polynomials
 
-@quotient_compatible
+# @quotient_compatible
 def poly_complexity(ref):
     """Add up the degrees of all the monomials """
     # need to add 1, otherwise constant polynomials return zero as well
     if ref == 0:
         return 0
+    elif is_Polynomial(ref):
+        return 1 + sum([i for (i, j) in enumerate(ref.coefficients(sparse=False)) if j])
     else:
         return 1 + sum([x.degree() for x in ref.monomials()])
 
