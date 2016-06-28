@@ -24,6 +24,7 @@ from sage.rings.polynomial.polynomial_element import is_Polynomial
 from sage.rings.polynomial.multi_polynomial_element import is_MPolynomial
 from sage.rings.laurent_series_ring_element import is_LaurentSeries
 from sage.rings.polynomial.polynomial_ring import is_PolynomialRing
+from sage.rings.number_field.number_field_element import is_NumberFieldElement
 import re
 
 # wildcards
@@ -878,6 +879,8 @@ def poly_complexity(ref):
     # need to add 1, otherwise constant polynomials return zero as well
     if ref == 0:
         return 0
+    elif is_NumberFieldElement(ref):
+        return 1
     elif is_Polynomial(ref):
         return 1 + sum([i for (i, j) in enumerate(ref.coefficients(sparse=False)) if j])
     else:
