@@ -19,7 +19,8 @@ from sage.all import (QQ,
                       latex,
                       sqrt,
                       solve,
-                      O)
+                      O,
+                      randint)
 from sage.rings.polynomial.polynomial_element import is_Polynomial
 from sage.rings.polynomial.multi_polynomial_element import is_MPolynomial
 from sage.rings.laurent_series_ring_element import is_LaurentSeries
